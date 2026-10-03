@@ -1,11 +1,18 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
-export function useReveal(): void {
+export function useReveal() {
+    const revealElements = useRef<HTMLElement[]>([]);
+
+    const setRevealRef = useCallback((element: HTMLElement | null) => {
+        if (
+            element &&
+            !revealElements.current.includes(element)
+        ) {
+            revealElements.current.push(element);
+        }
+    }, []);
+
     useEffect(() => {
-        const revealElements = document.querySelectorAll<HTMLElement>(
-            ".reveal"
-        );
-
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -20,7 +27,7 @@ export function useReveal(): void {
             }
         );
 
-        revealElements.forEach((element) => {
+        revealElements.current.forEach((element) => {
             observer.observe(element);
         });
 
@@ -28,4 +35,6 @@ export function useReveal(): void {
             observer.disconnect();
         };
     }, []);
+
+    return setRevealRef;
 }

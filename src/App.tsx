@@ -5,12 +5,9 @@ import Features from "./components/Features";
 import About from "./components/About";
 import CTA from "./components/CTA";
 import Footer from "./components/Footer";
-import { useReveal } from "./hooks/useReveal";
 import "./App.css";
 
 function App() {
-    useReveal();
-
     useEffect(() => {
         document.title = "NovaFlow - Grow Your Business";
     }, []);

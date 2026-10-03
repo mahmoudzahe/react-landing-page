@@ -1,10 +1,18 @@
 import Counter from "./Counter";
+import { useReveal } from "../hooks/useReveal";
+
+const chartBars = Array.from({ length: 6 });
 
 function Hero() {
+    const revealRef = useReveal();
+
     return (
         <section className="hero" id="home">
             <div className="container hero-content">
-                <div className="hero-text reveal">
+                <div
+                    ref={revealRef}
+                    className="hero-text reveal"
+                >
                     <span className="hero-badge">
                         Smart. Simple. Powerful.
                     </span>
@@ -23,13 +31,19 @@ function Hero() {
                             Get Started
                         </a>
 
-                        <a href="#features" className="btn secondary-btn">
+                        <a
+                            href="#features"
+                            className="btn secondary-btn"
+                        >
                             Explore Features
                         </a>
                     </div>
                 </div>
 
-                <div className="hero-image reveal">
+                <div
+                    ref={revealRef}
+                    className="hero-image reveal"
+                >
                     <div className="dashboard-card">
                         <div className="dashboard-header">
                             <span></span>
@@ -42,19 +56,19 @@ function Hero() {
                                 <small>Total Revenue</small>
 
                                 <h3>
-                                    <Counter target={24580} prefix="$" />
+                                    <Counter
+                                        target={24580}
+                                        prefix="$"
+                                    />
                                 </h3>
 
                                 <p>+18.5%</p>
                             </div>
 
                             <div className="chart">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
+                                {chartBars.map((_, index) => (
+                                    <div key={index}></div>
+                                ))}
                             </div>
                         </div>
                     </div>

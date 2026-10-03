@@ -1,46 +1,33 @@
 import { useEffect, useState } from "react";
-
-const navItems = [
-    { label: "Home", href: "#home", section: "home" },
-    { label: "Features", href: "#features", section: "features" },
-    { label: "About", href: "#about", section: "about" },
-    { label: "Contact", href: "#cta", section: "cta" }
-];
+import { navItems } from "../constants/navItems";
 
 function Header() {
     const [activeSection, setActiveSection] = useState("home");
 
     useEffect(() => {
-        const sections = Array.from(
-            document.querySelectorAll<HTMLElement>("main section[id]")
+        const sections = document.querySelectorAll<HTMLElement>(
+            "main section[id]"
         );
 
-        const updateActiveSection = () => {
-            let currentSection = "home";
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setActiveSection(entry.target.id);
+                    }
+                });
+            },
+            {
+                rootMargin: "-40% 0px -50% 0px"
+            }
+        );
 
-            sections.forEach((section) => {
-                const sectionTop = section.offsetTop - 160;
-                const sectionBottom = sectionTop + section.offsetHeight;
-
-                if (
-                    window.scrollY >= sectionTop &&
-                    window.scrollY < sectionBottom
-                ) {
-                    currentSection = section.id;
-                }
-            });
-
-            setActiveSection(currentSection);
-        };
-
-        window.addEventListener("scroll", updateActiveSection, {
-            passive: true
+        sections.forEach((section) => {
+            observer.observe(section);
         });
 
-        updateActiveSection();
-
         return () => {
-            window.removeEventListener("scroll", updateActiveSection);
+            observer.disconnect();
         };
     }, []);
 
@@ -57,7 +44,9 @@ function Header() {
                             key={item.section}
                             href={item.href}
                             className={
-                                activeSection === item.section ? "active" : ""
+                                activeSection === item.section
+                                    ? "active"
+                                    : ""
                             }
                         >
                             {item.label}
